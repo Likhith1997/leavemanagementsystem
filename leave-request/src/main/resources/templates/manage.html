@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+		xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+	<title></title>
+	
+	<head th:replace="fragments/header :: header"></head>
+	
+	<body>
+	
+	<div id="wrapper">
+
+		<div th:replace="fragments/sidebar :: sidebar"></div>
+		
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Manage Employee Leaves</h1>
+                        
+                        <table id="employeeLeaves"></table>
+                        
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+	</div>
+    <!-- /#wrapper -->
+    
+    
+	<div th:replace="fragments/footer :: footer"></div>
+	
+	<script type="text/javascript">
+		$('#employeeLeaves').bootstrapTable({
+			url: '/json/get-all-tasks',
+			pagination: true,
+			pageSize: 10,
+			pageList: [10, 25, 50, 100],
+			sortName: 'createTime',
+			sortOrder: 'desc',
+			columns: [{
+				field: 'processVariables.leaveId',
+				title: 'Leave ID',
+				sortable: true
+			},{
+				field: 'createTime',
+				title: 'Date Submitted',
+				sortable: true,
+				formatter: function(value, row, index) {
+					return value == undefined ? '-' : moment(value).format("MM/DD/YYYY");  
+				}
+			}, {
+				field: 'processVariables.employeeUsername',
+				title: "Requested By",
+				sortable: true
+			}, {
+				field: 'processVariables.startDate',
+				title: 'Start Date',
+				sortable: true,
+				formatter: function(value, row, index) {
+					return value == undefined ? '-' : moment(value).format("MM/DD/YYYY");  
+				}
+			}, {
+				field: 'processVariables.endDate',
+				title: 'End Date',
+				sortable: true,
+				formatter: function(value, row, index) {
+					return value == undefined ? '-' : moment(value).format("MM/DD/YYYY");
+				}
+			}, {
+				field: 'operate',
+				title: 'Actions',
+				formatter: function(value, row, index) {
+					return '<a href="/review/' + row.id + '">View Details</a>';
+				}
+			}]
+		});
+		
+	</script>
+	</body>
+
+</html>
